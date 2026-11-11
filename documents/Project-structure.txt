@@ -1,0 +1,111 @@
+coachdesk-frontend/
+├── public/
+│   ├── favicon.svg
+│   └── logo.svg
+├── src/
+│   ├── api/
+│   │   ├── client.ts              axios instance + interceptors
+│   │   ├── auth.api.ts            login, refresh, logout, me
+│   │   ├── dashboard.api.ts
+│   │   ├── students.api.ts
+│   │   ├── courses.api.ts
+│   │   ├── batches.api.ts
+│   │   ├── teachers.api.ts
+│   │   ├── attendance.api.ts
+│   │   ├── fees.api.ts
+│   │   ├── exams.api.ts
+│   │   ├── tenants.api.ts
+│   │   └── index.ts
+│   ├── assets/
+│   │   └── logo.tsx
+│   ├── components/
+│   │   ├── ui/                    shadcn primitives
+│   │   │   ├── button.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── table.tsx
+│   │   │   ├── badge.tsx
+│   │   │   ├── select.tsx
+│   │   │   ├── toast.tsx
+│   │   │   └── ...
+│   │   ├── layout/
+│   │   │   ├── Sidebar.tsx
+│   │   │   ├── Topbar.tsx
+│   │   │   ├── AdminLayout.tsx
+│   │   │   └── AuthLayout.tsx
+│   │   ├── common/
+│   │   │   ├── EmptyState.tsx
+│   │   │   ├── LoadingSpinner.tsx
+│   │   │   ├── PageHeader.tsx
+│   │   │   └── ConfirmDialog.tsx
+│   │   └── forms/
+│   │       └── FormField.tsx
+│   ├── features/
+│   │   ├── auth/
+│   │   │   ├── LoginPage.tsx
+│   │   │   ├── ForgotPasswordPage.tsx
+│   │   │   ├── ResetPasswordPage.tsx
+│   │   │   └── RegisterPage.tsx
+│   │   ├── dashboard/
+│   │   │   ├── DashboardPage.tsx
+│   │   │   ├── StatCards.tsx
+│   │   │   ├── CollectionChart.tsx
+│   │   │   ├── AdmissionsChart.tsx
+│   │   │   └── RecentPayments.tsx
+│   │   ├── students/
+│   │   │   ├── StudentsPage.tsx
+│   │   │   ├── StudentFormDialog.tsx
+│   │   │   └── StudentFilters.tsx
+│   │   ├── courses/
+│   │   ├── batches/
+│   │   ├── teachers/
+│   │   ├── attendance/
+│   │   ├── fees/
+│   │   ├── exams/
+│   │   ├── reports/
+│   │   ├── settings/
+│   │   └── super-admin/
+│   │       ├── TenantsPage.tsx
+│   │       ├── PlansPage.tsx
+│   │       ├── SubscriptionsPage.tsx
+│   │       ├── SupportPage.tsx
+│   │       └── AuditLogsPage.tsx
+│   ├── hooks/
+│   │   ├── useAuth.ts
+│   │   ├── useTenant.ts
+│   │   ├── usePermission.ts
+│   │   ├── useDebounce.ts
+│   │   └── useToast.ts
+│   ├── layouts/
+│   │   ├── AdminLayout.tsx
+│   │   └── AuthLayout.tsx
+│   ├── lib/
+│   │   ├── utils.ts               cn() helper (shadcn)
+│   │   └── validators.ts          zod schemas
+│   ├── routes/
+│   │   ├── AppRoutes.tsx
+│   │   ├── ProtectedRoute.tsx
+│   │   └── PermissionRoute.tsx
+│   ├── stores/
+│   │   ├── auth.store.ts          Zustand
+│   │   └── ui.store.ts
+│   ├── types/
+│   │   ├── auth.types.ts
+│   │   ├── student.types.ts
+│   │   ├── fee.types.ts
+│   │   └── index.ts
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css
+├── .env.example
+├── .env.local                     (gitignored)
+├── .gitignore
+├── index.html
+├── package.json
+├── postcss.config.js
+├── tailwind.config.ts
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite.config.ts
+└── README.md
