@@ -99,7 +99,7 @@ const UsersPage: React.FC = () => {
   });
 
   const resetMutation = useMutation({
-    mutationFn: (publicId: string) => usersApi.resetPassword(publicId),
+    mutationFn: (publicId: string) => usersApi.resetPasswordUsers(publicId),
     onSuccess: (res) => {
       setTempPassword(res.temp_password);
       toast.success('Password reset — all sessions logged out');

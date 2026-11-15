@@ -50,10 +50,29 @@ export const usersApi = {
     await apiClient.put(`/users/${publicId}`, payload);
   },
 
-  resetPassword: async (publicId: string): Promise<{ temp_password: string }> => {
+  resetPasswordUsers: async (publicId: string): Promise<{ temp_password: string }> => {
     const { data } = await apiClient.post<ApiResponse<{ temp_password: string }>>(`/users/${publicId}/reset-password`);
     return data.data;
   },
+
+  resetPassword : async (payload: { token: string; password: string }): Promise<void> => {
+    const { data } = await apiClient.post('/users/reset-password', payload);
+    return data.data;
+  },
+
+  // async logout(refreshToken: string): Promise<void> {
+  //   await apiClient.post('/auth/logout', { refresh_token: refreshToken });
+  // },
+  newUserEmail : async (payload: { token: string; password: string }): Promise<void> => {
+    const { data } = await apiClient.post(`/auth/new-user-email`, payload);
+    return data.data;
+  },
+
+  forgotPassword : async (email: string): Promise<void> => {
+    const { data } = await apiClient.post('/auth/forgot-password', { email });
+    return data.data;
+  },
+
 };
 
 export const settingsApi = {

@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { authApi } from '@/api/auth.api';
+//import { authApi } from '@/api/auth.api';
+import { usersApi } from '@/api/admin.api';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import FormField from '@/components/forms/FormField';
@@ -26,7 +28,7 @@ const ForgotPasswordPage: React.FC = () => {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      await authApi.forgotPassword(values.email);
+      await usersApi.forgotPassword(values.email);
       setSent(true);
     } catch {
       toast.error('Could not send reset link. Please try again.');

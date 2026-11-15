@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye } from 'lucide-react';
 import { studentsApi } from '@/api/students.api';
 import { batchesApi } from '@/api/batches.api';
+import { branchesApi } from '@/api/admin.api';
 import { useDebounce } from '@/hooks/useDebounce';
 import PageHeader from '@/components/common/PageHeader';
 import EmptyState from '@/components/common/EmptyState';
@@ -15,6 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from '@/components/ui/toast';
 import StudentFilters, { StudentFiltersValue } from './StudentFilters';
 import StudentFormDialog from './StudentFormDialog';
+import StudentDetailsDialog from './StudentDetailsDialog';
 import type { Student } from '@/types';
 
 const StudentsPage: React.FC = () => {
@@ -24,6 +26,7 @@ const StudentsPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Student | null>(null);
+  const [viewing, setViewing] = useState<Student | null>(null);
   const [deleting, setDeleting] = useState<Student | null>(null);
 
   const params = useMemo(
@@ -41,10 +44,15 @@ const StudentsPage: React.FC = () => {
     queryFn: () => batchesApi.list({ perPage: 100 }),
   });
 
+  const { data: branches = [] } = useQuery({
+    queryKey: ['branches'],
+    queryFn: branchesApi.list,
+  });
+
   const batches = batchesData?.data ?? [];
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => studentsApi.delete(id),
+    mutationFn: (id: string | number) => studentsApi.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['students'] });
       toast.success('Student removed');
@@ -70,7 +78,11 @@ const StudentsPage: React.FC = () => {
 
       <Card>
         <CardContent className="p-5">
-          <StudentFilters value={filters} onChange={(v) => { setFilters(v); setPage(1); }} batches={batches} />
+          <StudentFilters
+            value={filters}
+            onChange={(v) => { setFilters(v); setPage(1); }}
+            batches={batches}
+          />
 
           {isLoading ? (
             <LoadingSpinner fullScreen />
@@ -97,23 +109,39 @@ const StudentsPage: React.FC = () => {
                   {students.map((s) => (
                     <TableRow key={s.id}>
                       <TableCell className="font-medium">
-                        {s.firstName} {s.lastName}
+                        {s.name}
                         {s.email && <div className="text-xs text-slate-400">{s.email}</div>}
                       </TableCell>
-                      <TableCell>{s.phone}</TableCell>
+                      <TableCell>{s.phone ?? '—'}</TableCell>
                       <TableCell className="text-slate-500">
-                        {batches.find((b) => b.id === s.batchId)?.name ?? '—'}
+                        {batches.find((b) => String(b.id) === String(s.batchId ?? s.batch_id))?.batch_name ??
+                          batches.find((b) => String(b.id) === String(s.batchId ?? s.batch_id))?.name ??
+                          s.batch_name ??
+                          '—'}
                       </TableCell>
                       <TableCell>
                         <Badge
                           variant={
-                            s.status === 'active' ? 'success' : s.status === 'alumni' ? 'info' : 'secondary'
+                            s.status === 'active'
+                              ? 'success'
+                              : s.status === 'alumni'
+                              ? 'info'
+                              : 'secondary'
                           }
                         >
                           {s.status}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => setViewing(s)}
+                          title="View details"
+                          aria-label={`View ${s.name} details`}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
                         <Button
                           size="icon"
                           variant="ghost"
@@ -140,7 +168,7 @@ const StudentsPage: React.FC = () => {
               {pagination && pagination.totalPages > 1 && (
                 <div className="mt-4 flex items-center justify-between text-sm text-slate-500">
                   <span>
-                    Page {pagination.currentPage} of {pagination.totalPages} · {pagination.total} students
+                    Page {pagination.page} of {pagination.totalPages} · {pagination.total} students
                   </span>
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
@@ -162,13 +190,25 @@ const StudentsPage: React.FC = () => {
         </CardContent>
       </Card>
 
-      <StudentFormDialog open={formOpen} onOpenChange={setFormOpen} student={editing} batches={batches} />
+      <StudentFormDialog
+        open={formOpen}
+        onOpenChange={setFormOpen}
+        student={editing}
+        batches={batches}
+        branches={branches}
+      />
+      <StudentDetailsDialog
+        student={viewing}
+        onClose={() => setViewing(null)}
+        batches={batches}
+        branches={branches}
+      />
 
       <ConfirmDialog
         open={!!deleting}
         onOpenChange={(o) => !o && setDeleting(null)}
         title="Remove student?"
-        description={`This will soft-delete ${deleting?.firstName ?? ''} ${deleting?.lastName ?? ''}. You can restore later.`}
+        description={`This will soft-delete ${deleting?.name ?? ''}. You can restore later.`}
         confirmLabel="Remove"
         destructive
         loading={deleteMutation.isPending}

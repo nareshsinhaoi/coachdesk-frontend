@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Search, RotateCcw } from 'lucide-react';
+import type { Batch } from '@/types';   // <-- use your real Batch type
 
 export interface StudentFiltersValue {
   search: string;
@@ -13,7 +14,7 @@ export interface StudentFiltersValue {
 interface StudentFiltersProps {
   value: StudentFiltersValue;
   onChange: (v: StudentFiltersValue) => void;
-  batches?: { id: string; name: string }[];
+  batches?: Batch[];                     // <-- was inline shape
 }
 
 const StudentFilters: React.FC<StudentFiltersProps> = ({ value, onChange, batches = [] }) => (
@@ -44,8 +45,8 @@ const StudentFilters: React.FC<StudentFiltersProps> = ({ value, onChange, batche
     >
       <option value="">All batches</option>
       {batches.map((b) => (
-        <option key={b.id} value={b.id}>
-          {b.name}
+        <option key={b.id} value={String(b.id)}>
+          {b.name ?? `Batch ${b.id}`}   {/* name may be undefined per your type */}
         </option>
       ))}
     </Select>

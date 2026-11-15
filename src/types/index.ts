@@ -39,17 +39,44 @@ export interface LoginPayload {
 }
 
 export interface Student {
-  id: number;
-  public_id: string;
-  student_code: string;
+  id: string | number;
+  public_id?: string;
+  student_code?: string;
   name: string;
-  email?: string;
-  phone?: string;
-  gender?: 'male' | 'female' | 'other';
-  status: 'active' | 'inactive' | 'completed' | 'cancelled';
-  admission_date?: string;
-  branch_name?: string;
-  branch_code?: string;
+  email?: string | null;
+  phone?: string | null;
+  dob?: string | null;
+  gender?: 'male' | 'female' | 'other' | null;
+  status: 'active' | 'inactive' | 'completed' | 'cancelled' | 'alumni';
+  admission_date?: string | null;
+  branch_name?: string | null;
+  branch_code?: string | null;
+  branchId?: string | number | null;
+  branch_id?: string | number | null;
+  branchName?: string | null;
+  branchCode?: string | null;
+  studentCode?: string | null;
+  admissionDate?: string | null;
+  addressLine1?: string | null;
+  address_line1?: string | null;
+  addressLine2?: string | null;
+  address_line2?: string | null;
+  city?: string | null;
+  state?: string | null;
+  pincode?: string | null;
+  photoPath?: string | null;
+  batchId?: string | number | null;
+  batch_id?: string | number | null;
+  batchName?: string | null;
+  batch_name?: string | null;
+  guardianName?: string | null;
+  guardian_name?: string | null;
+  guardianRelationship?: string | null;
+  guardian_relationship?: string | null;
+  guardianPhone?: string | null;
+  guardian_phone?: string | null;
+  guardianEmail?: string | null;
+  guardian_email?: string | null;
 }
 
 export interface Batch {

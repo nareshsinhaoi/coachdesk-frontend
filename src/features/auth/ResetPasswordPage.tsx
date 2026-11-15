@@ -3,7 +3,8 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { authApi } from '@/api/auth.api';
+//import { authApi } from '@/api/auth.api';
+import { usersApi } from '@/api/admin.api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import FormField from '@/components/forms/FormField';
@@ -38,7 +39,7 @@ const ResetPasswordPage: React.FC = () => {
       return;
     }
     try {
-      await authApi.resetPassword({ token, password: values.password });
+      await usersApi.resetPassword({ token, password: values.password });
       toast.success('Password updated. Please sign in.');
       navigate('/login');
     } catch {
