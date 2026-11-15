@@ -9,9 +9,18 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { formatDate } from '@/lib/utils';
 
+type Tenant = {
+  id: string;
+  name: string;
+  ownerEmail: string;
+  planName?: string | null;
+  status: string;
+  createdAt: string;
+};
+
 const TenantsPage: React.FC = () => {
   const { data, isLoading } = useQuery({ queryKey: ['tenants'], queryFn: () => tenantsApi.list() });
-  const tenants = data?.data ?? [];
+  const tenants: Tenant[] = data?.data ?? [];
 
   return (
     <div>
@@ -34,7 +43,7 @@ const TenantsPage: React.FC = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {tenants.map((t) => (
+                {tenants.map((t: Tenant) => (
                   <TableRow key={t.id}>
                     <TableCell className="font-medium">{t.name}</TableCell>
                     <TableCell>{t.ownerEmail}</TableCell>

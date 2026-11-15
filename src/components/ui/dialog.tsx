@@ -6,9 +6,15 @@ interface DialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
+  closeOnOutsideClick?: boolean;
 }
 
-const Dialog: React.FC<DialogProps> = ({ open, onOpenChange, children }) => {
+const Dialog: React.FC<DialogProps> = ({
+  open,
+  onOpenChange,
+  children,
+  closeOnOutsideClick = true,
+}) => {
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onOpenChange(false);
     if (open) document.addEventListener('keydown', onKey);
@@ -21,10 +27,10 @@ const Dialog: React.FC<DialogProps> = ({ open, onOpenChange, children }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
         className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"
-        onClick={() => onOpenChange(false)}
+        onClick={() => closeOnOutsideClick && onOpenChange(false)}
         aria-hidden
       />
-      <div className="relative z-10 w-full max-w-lg">{children}</div>
+      <div className="relative z-10 w-full max-w-4xl">{children}</div>
     </div>
   );
 };
