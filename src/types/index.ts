@@ -8,6 +8,7 @@ export interface ApiResponse<T = unknown> {
 
 export interface Pagination {
   page: number;
+  currentPage?: number;
   limit: number;
   total: number;
   totalPages: number;
@@ -67,8 +68,12 @@ export interface Student {
   photoPath?: string | null;
   batchId?: string | number | null;
   batch_id?: string | number | null;
+  batchIds?: Array<string | number> | null;
+  batch_ids?: Array<string | number> | null;
+  active_batch_ids?: Array<string | number> | null;
   batchName?: string | null;
   batch_name?: string | null;
+  batch_names?: string | null;
   guardianName?: string | null;
   guardian_name?: string | null;
   guardianRelationship?: string | null;
