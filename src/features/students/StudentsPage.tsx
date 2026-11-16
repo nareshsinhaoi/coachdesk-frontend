@@ -114,9 +114,9 @@ const StudentsPage: React.FC = () => {
                       </TableCell>
                       <TableCell>{s.phone ?? '—'}</TableCell>
                       <TableCell className="text-slate-500">
-                        {batches.find((b) => String(b.id) === String(s.batchId ?? s.batch_id))?.batch_name ??
-                          batches.find((b) => String(b.id) === String(s.batchId ?? s.batch_id))?.name ??
-                          s.batch_name ??
+                        {batches.find((b) => String(b.id) === String(s.batchId ?? (s as any).batch_id))?.batch_name ??
+                          batches.find((b) => String(b.id) === String(s.batchId ?? (s as any).batch_id))?.name ??
+                          (s as any).batch_name ??
                           '—'}
                       </TableCell>
                       <TableCell>
@@ -168,7 +168,7 @@ const StudentsPage: React.FC = () => {
               {pagination && pagination.totalPages > 1 && (
                 <div className="mt-4 flex items-center justify-between text-sm text-slate-500">
                   <span>
-                    Page {pagination.page} of {pagination.totalPages} · {pagination.total} students
+                    Page {pagination.currentPage ?? pagination.page ?? 1} of {pagination.totalPages} · {pagination.total} students
                   </span>
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>

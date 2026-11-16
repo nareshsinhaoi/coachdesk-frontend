@@ -24,6 +24,7 @@ export interface StudentInput {
   state?: string;
   pincode?: string;
   batchId?: string | number | null;
+  batchIds?: Array<string | number> | null;
   admissionDate?: string;
   guardianName?: string;
   guardianRelationship?: string;
@@ -69,7 +70,11 @@ export const studentsApi = {
       city: payload.city,
       state: payload.state,
       pincode: payload.pincode,
-      batch_id: payload.batchId,
+      batch_ids: payload.batchIds !== undefined
+        ? (payload.batchIds ?? []).map(Number)
+        : payload.batchId != null
+          ? [Number(payload.batchId)]
+          : [],
       admission_date: payload.admissionDate,
       guardian_name: payload.guardianName,
       guardian_relationship: payload.guardianRelationship,
@@ -93,7 +98,12 @@ export const studentsApi = {
     if (payload.city !== undefined)         body.city = payload.city;
     if (payload.state !== undefined)        body.state = payload.state;
     if (payload.pincode !== undefined)      body.pincode = payload.pincode;
-    if (payload.batchId !== undefined)      body.batch_id = payload.batchId;
+    // Enrollment is stored in cd_batch_students; the API replaces active enrollments.
+    if (payload.batchIds !== undefined) {
+      body.batch_ids = (payload.batchIds ?? []).map((id) => Number(id));
+    } else if (payload.batchId !== undefined) {
+      body.batch_ids = payload.batchId ? [Number(payload.batchId)] : [];
+    }
     if (payload.admissionDate !== undefined) body.admission_date = payload.admissionDate;
 
     if (payload.guardianName !== undefined) body.guardian_name = payload.guardianName;
